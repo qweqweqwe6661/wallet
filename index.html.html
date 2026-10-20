@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Кошелёк">
+<title>Кошелёк</title>
+<style>
+:root{--bg:#eef1f0;--card:#fff;--text:#16181a;--muted:#8a9190;--green:#1a9a3a;--chip:#f1f3f2;--warn:#d9540b;--g1:#9fd3c7;--g2:#c9efdc;--nav:#fff;--line:#e6e9e8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1211;--card:#1a1d1c;--text:#f2f4f3;--muted:#8f9795;--chip:#262a29;--g1:#1f4b44;--g2:#173a2b;--nav:#1a1d1c;--line:#2a2e2d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1211;--card:#1a1d1c;--text:#f2f4f3;--muted:#8f9795;--chip:#262a29;--g1:#1f4b44;--g2:#173a2b;--nav:#1a1d1c;--line:#2a2e2d;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.app{max-width:480px;margin:0 auto;padding-bottom:84px;min-height:100vh}
+.hero{background:linear-gradient(160deg,var(--g1),var(--g2));border-radius:0 0 28px 28px;padding:14px 16px 20px}
+.top{display:flex;align-items:center;gap:10px}
+.ava{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;opacity:.9}
+.search{flex:1;height:40px;border-radius:14px;background:rgba(255,255,255,.35);display:flex;align-items:center;padding:0 14px;color:var(--muted);font-size:15px}
+.ib{width:36px;height:36px;border:0;background:none;color:var(--text);display:grid;place-items:center;padding:0}
+.greet{display:flex;align-items:center;justify-content:space-between;margin:22px 0 18px}
+.greet button.name{all:unset;font-size:21px;font-weight:700;cursor:pointer;line-height:1.2}
+.greet .sub{font-size:13px;color:var(--muted);font-weight:500;display:block;margin-bottom:2px}
+.row{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.row::-webkit-scrollbar{display:none}
+.side{display:flex;flex-direction:column;gap:10px}
+.sq{width:60px;height:60px;border-radius:18px;background:var(--card);display:grid;place-items:center;flex:none}
+.cardx{all:unset;flex:none;width:152px;height:132px;border-radius:20px;background:var(--card);padding:14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+.logo{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#222 50%,var(--green) 50%)}
+.bal{font-size:19px;font-weight:700}
+.dig{font-size:12px;color:var(--muted);margin-top:2px}
+.sec{background:var(--card);border-radius:22px;margin:12px 12px 0;padding:18px 16px}
+.sec h2{margin:0;font-size:19px}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.more{background:var(--chip);border:0;color:var(--text);border-radius:10px;padding:6px 12px;font-size:13px;font-weight:600}
+.it{display:flex;gap:12px;padding:10px 0;align-items:flex-start}
+.ic{width:40px;height:40px;border-radius:50%;background:var(--chip);display:grid;place-items:center;flex:none}
+.mid{flex:1;min-width:0}.t{font-size:15px;font-weight:600}.s{font-size:13px;color:var(--muted);margin-top:2px}
+.amt{font-size:15px;font-weight:700;white-space:nowrap}.pos{color:var(--green)}.fail{color:var(--muted)}
+.err{color:var(--warn);font-size:13px;margin-top:6px}
+.contacts{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.contacts::-webkit-scrollbar{display:none}
+.c{width:64px;height:64px;border-radius:20px;background:var(--chip);display:grid;place-items:center;font-weight:700;color:var(--muted);flex:none;font-size:18px}
+.c.go{background:var(--green);color:#fff}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--nav);border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-around;max-width:480px;margin:0 auto}
+nav div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);flex:1}
+nav div.on{color:var(--green)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.ov.show{display:flex}
+.tiles{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.tiles::-webkit-scrollbar{display:none}
+.tile{all:unset;flex:none;min-width:130px;background:var(--chip);border-radius:18px;padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:4px;box-sizing:border-box}
+.tile .tn{font-size:13px;color:var(--muted);margin-bottom:6px}.tile .tl{font-size:11px;color:var(--muted)}.tile .tv{font-size:17px;font-weight:700}
+.tile.tot{background:var(--green);color:#fff;cursor:default}.tile.tot .tn{color:rgba(255,255,255,.8)}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qa button{all:unset;background:var(--chip);border-radius:18px;padding:16px;font-weight:600;font-size:15px;cursor:pointer}
+.ph{padding:20px 16px 6px}.ph h1{margin:0;font-size:26px}
+.bar{height:8px;border-radius:4px;background:var(--line);margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--green);border-radius:4px}
+.sheet{background:var(--card);width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom,0px))}
+.sheet h3{margin:0 0 14px;font-size:18px}
+.sheet label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+.sheet select{width:100%;font-size:17px;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--chip);color:var(--text)}
+.sheet .del{background:none;color:var(--warn);margin-top:6px}
+.sheet input{width:100%;font-size:17px;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:var(--chip);color:var(--text);outline:none}
+.sheet input:focus{border-color:var(--green)}
+.btns{display:flex;gap:10px;margin-top:18px}
+.btns button{flex:1;padding:14px;border-radius:14px;border:0;font-size:16px;font-weight:700}
+.ok{background:var(--green);color:#fff}.no{background:var(--chip);color:var(--text)}
+</style>
+</head>
+<body>
+<div class="app" id="p-main">
+  <div class="hero">
+    <div class="top">
+      <div class="ava"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></div>
+      <div class="search">Поиск</div>
+      <button class="ib" aria-label="Чат"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1-4.5A8 8 0 1 1 21 12z"/></svg></button>
+      <button class="ib" aria-label="Меню"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="6" height="6" rx="2"/><rect x="14" y="4" width="6" height="6" rx="2"/><rect x="4" y="14" width="6" height="6" rx="2"/><rect x="14" y="14" width="6" height="6" rx="2"/></svg></button>
+    </div>
+    <div class="greet">
+      <button class="name" id="nameBtn"><span class="sub">Здравствуйте,</span><span id="nameTxt">Елизавета</span></button>
+      <div style="display:flex">
+        <button class="ib" id="eye" aria-label="Скрыть суммы"><svg id="eyeI" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="ib" aria-label="Ещё"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="side">
+        <div class="sq"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M8 12h8"/></svg></div>
+        <div class="sq"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg></div>
+      </div>
+      <div id="cards" style="display:flex;gap:10px"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sh"><h2>История</h2><button class="more" id="addH">+ Добавить</button></div>
+    <div id="hist"></div>
+  </div>
+
+  <div class="sec">
+    <h2 style="margin-bottom:14px">Переводы</h2>
+    <div class="contacts"><div class="c go">→</div><div class="c">ЮР</div><div class="c">ТА</div><div class="c">ДВ</div><div class="c">СА</div></div>
+  </div>
+  <div class="sec"><div class="sh"><h2>Расходы за месяц</h2><button class="more" data-add="exp">+ Добавить</button></div><div class="tiles" id="l-exp"></div></div>
+  <div class="sec"><h2 style="margin-bottom:14px">Быстрые действия</h2><div class="qa"><button data-go="save">🎯 Копилки</button><button data-go="pay">💳 Платежи</button><button data-go="life">🔔 Для жизни</button><button data-go="loan">🏦 Кредиты</button></div></div>
+  <div class="sec"><div class="sh"><h2>Курсы валют</h2><button class="more" data-add="rate">+ Добавить</button></div><div class="tiles" id="l-rate"></div></div>
+</div>
+
+<nav>
+  <div class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9H6v-9H3z"/></svg>Главное</div>
+  <div><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="16" y="9" width="4" height="11" rx="1"/></svg>Накопления</div>
+  <div><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l8 5v8l-8 5-8-5V8z"/></svg>Для жизни</div>
+  <div><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="6" width="18" height="12" rx="3"/></svg>Платежи</div>
+  <div><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="14" rx="3"/></svg>Кредиты</div>
+</nav>
+
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+
+<script>
+var KEY='wallet-v1';
+var DH=[{t:'АШОТБЕК',s:'Сегодня • Перевод по номеру',a:1488,k:'out'},{t:'ПИДОРАСКА',s:'Вчера • Входящий перевод',a:666,k:'in'},{t:'Онлайн-магазин',s:'Вчера • Оплата товаров и услуг',a:399,k:'fail'}];
+var st={name:'Елизавета',hide:false,cards:[{digits:'3233',bal:500000,hint:'2174'},{digits:'0181',bal:0,hint:''}],hist:DH};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.cards)st=p;}}catch(e){}
+if(!st.hist)st.hist=DH;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+function fmt(n){return n.toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2})+' ₽';}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function render(){
+  document.getElementById('nameTxt').textContent=st.name;
+  var h='';
+  st.cards.forEach(function(c,i){
+    h+='<button class="cardx" data-i="'+i+'"><div><div class="logo"></div><div class="dig">'+esc(c.hint||'')+'</div></div><div><div class="bal">'+(st.hide?'•••• ₽':fmt(c.bal))+'</div><div class="dig">•• '+esc(c.digits)+'</div></div></button>';
+  });
+  document.getElementById('cards').innerHTML=h;
+  renderHist();
+  renderAll();
+  document.querySelectorAll('.cardx').forEach(function(b){b.onclick=function(){openCard(+b.dataset.i);};});
+}
+var ov=document.getElementById('ov'),sheet=document.getElementById('sheet');
+function close(){ov.classList.remove('show');}
+ov.addEventListener('click',function(e){if(e.target===ov)close();});
+function openName(){
+  sheet.innerHTML='<h3>Ваше имя</h3><label>Имя в приветствии</label><input id="f1" value="'+esc(st.name)+'" maxlength="30"><div class="btns"><button class="no" id="c">Отмена</button><button class="ok" id="s">Сохранить</button></div>';
+  ov.classList.add('show');
+  document.getElementById('c').onclick=close;
+  document.getElementById('s').onclick=function(){var v=document.getElementById('f1').value.trim();if(v){st.name=v;save();render();}close();};
+}
+function openCard(i){
+  var c=st.cards[i];
+  sheet.innerHTML='<h3>Изменить счёт</h3><label>Баланс, ₽</label><input id="f1" inputmode="decimal" value="'+String(c.bal).replace('.',',')+'"><label>Последние 4 цифры</label><input id="f2" inputmode="numeric" maxlength="4" value="'+esc(c.digits)+'"><label>Подпись над суммой (необязательно)</label><input id="f3" maxlength="12" value="'+esc(c.hint||'')+'"><div class="btns"><button class="no" id="c">Отмена</button><button class="ok" id="s">Сохранить</button></div>';
+  ov.classList.add('show');
+  document.getElementById('c').onclick=close;
+  document.getElementById('s').onclick=function(){
+    var n=parseFloat(document.getElementById('f1').value.replace(/\s/g,'').replace(',','.'));
+    if(!isNaN(n))c.bal=n;
+    c.digits=document.getElementById('f2').value.replace(/\D/g,'').slice(0,4)||c.digits;
+    c.hint=document.getElementById('f3').value.trim();
+    save();render();close();
+  };
+}
+function money(n){return n.toLocaleString('ru-RU',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+' ₽';}
+function renderHist(){
+  var h='';
+  st.hist.forEach(function(x,i){
+    var ic=x.k==='in'?'↓':x.k==='fail'?'🧺':'↑';
+    var amt=x.k==='in'?'+'+money(x.a):money(x.a);
+    var cl=x.k==='in'?'pos':x.k==='fail'?'fail':'';
+    h+='<div class="it" data-i="'+i+'" style="cursor:pointer"><div class="ic">'+ic+'</div><div class="mid"><div class="t">'+esc(x.t)+'</div><div class="s">'+esc(x.s)+'</div>'+(x.k==='fail'?'<div class="err">Недостаточно средств</div>':'')+'</div><div class="amt '+cl+'">'+(st.hide?'••• ₽':amt)+'</div></div>';
+  });
+  var el=document.getElementById('hist');
+  el.innerHTML=h;
+  el.querySelectorAll('.it').forEach(function(b){b.onclick=function(){openItem(+b.dataset.i);};});
+}
+function openItem(i){
+  var x=i<0?{t:'',s:'Сегодня • Перевод по номеру',a:0,k:'out'}:st.hist[i];
+  sheet.innerHTML='<h3>'+(i<0?'Новая операция':'Изменить операцию')+'</h3><label>Имя / название</label><input id="f1" maxlength="40" value="'+esc(x.t)+'"><label>Подпись (дата • тип)</label><input id="f2" maxlength="50" value="'+esc(x.s)+'"><label>Сумма, ₽</label><input id="f3" inputmode="decimal" value="'+String(x.a).replace('.',',')+'"><label>Тип</label><select id="f4"><option value="out">Исходящий перевод</option><option value="in">Входящий перевод</option><option value="fail">Неуспешная оплата</option></select><div class="btns"><button class="no" id="c">Отмена</button><button class="ok" id="s">Сохранить</button></div>'+(i<0?'':'<div class="btns"><button class="del" id="d">Удалить операцию</button></div>');
+  document.getElementById('f4').value=x.k;
+  ov.classList.add('show');
+  document.getElementById('c').onclick=close;
+  if(i>=0)document.getElementById('d').onclick=function(){st.hist.splice(i,1);save();render();close();};
+  document.getElementById('s').onclick=function(){
+    var n=parseFloat(document.getElementById('f3').value.replace(/\s/g,'').replace(',','.'));
+    var o={t:document.getElementById('f1').value.trim()||'Без названия',s:document.getElementById('f2').value.trim(),a:isNaN(n)?0:Math.abs(n),k:document.getElementById('f4').value};
+    if(i<0)st.hist.unshift(o);else st.hist[i]=o;
+    save();render();close();
+  };
+}
+document.getElementById('addH').onclick=function(){openItem(-1);};
+document.getElementById('nameBtn').onclick=openName;
+document.getElementById('eye').onclick=function(){st.hide=!st.hide;save();render();};
+var DEF={exp:[{t:'Еда',a:6200},{t:'Транспорт',a:2100},{t:'Переводы людям',a:3500},{t:'Развлечения',a:1800}],rate:[{t:'Юань',b:12.5,s:12.2},{t:'Доллар',b:85,s:79},{t:'Евро',b:92,s:86}],save:[{t:'Отпуск',a:30000,b:120000},{t:'Новый телефон',a:15000,b:60000}],life:[{t:'Интернет',a:600,d:'Каждое 5-е число'},{t:'Подписка на музыку',a:199,d:'Каждое 12-е число'}],pay:[{t:'Квартплата',a:4500,d:'ЖКХ'},{t:'Мобильная связь',a:500,d:'Основной номер'}],loan:[{t:'Рассрочка на ноутбук',a:42000,m:3500}]};
+Object.keys(DEF).forEach(function(k){if(!st[k])st[k]=DEF[k];});
+var L={exp:{f:[['t','Категория'],['a','Сумма, ₽',1]]},rate:{f:[['t','Валюта'],['b','Купить, ₽',1],['s','Продать, ₽',1]]},
+save:{ic:'🎯',f:[['t','Цель'],['a','Накоплено, ₽',1],['b','Нужно накопить, ₽',1]],sub:function(x){return 'Цель '+money(x.b);},pct:function(x){return x.b?x.a/x.b*100:0;}},
+life:{ic:'🔔',f:[['t','Название'],['a','Сумма, ₽',1],['d','Когда']],sub:function(x){return x.d||'';}},
+pay:{ic:'💳',f:[['t','Название'],['a','Сумма, ₽',1],['d','Комментарий']],sub:function(x){return x.d||'';}},
+loan:{ic:'🏦',f:[['t','Название'],['a','Остаток, ₽',1],['m','Платёж в месяц, ₽',1]],sub:function(x){return 'Платёж '+money(x.m||0)+' в месяц';}}};
+var PG={save:['Накопления','Копилки и цели'],life:['Для жизни','Регулярные платежи'],pay:['Платежи','Шаблоны платежей'],loan:['Кредиты','Кредиты и рассрочки']};
+var TABS=['main','save','life','pay','loan'];
+function el(id){return document.getElementById(id);}
+function mv(n){return st.hide?'••• ₽':money(n);}
+Object.keys(PG).forEach(function(k){var d=document.createElement('div');d.className='app';d.id='p-'+k;d.style.display='none';d.innerHTML='<div class="ph"><h1>'+PG[k][0]+'</h1></div><div class="sec"><div class="sh"><h2>'+PG[k][1]+'</h2><button class="more" data-add="'+k+'">+ Добавить</button></div><div id="l-'+k+'"></div></div>';document.body.insertBefore(d,document.querySelector('nav'));});
+function renderAll(){
+  var tot=st.exp.reduce(function(s,x){return s+x.a;},0);
+  var h='<div class="tile tot"><span class="tn">Все расходы</span><span class="tv">'+mv(tot)+'</span></div>';
+  st.exp.forEach(function(x,i){h+='<button class="tile" data-k="exp" data-i="'+i+'"><span class="tn">'+esc(x.t)+'</span><span class="tv">'+mv(x.a)+'</span></button>';});
+  el('l-exp').innerHTML=h;
+  h='';st.rate.forEach(function(x,i){h+='<button class="tile" data-k="rate" data-i="'+i+'"><span class="tn">'+esc(x.t)+'</span><span class="tl">Купить</span><span class="tv">'+money(x.b)+'</span><span class="tl">Продать</span><span class="tv">'+money(x.s)+'</span></button>';});
+  el('l-rate').innerHTML=h;
+  Object.keys(PG).forEach(function(k){var c=L[k],h='';st[k].forEach(function(x,i){h+='<div class="it" data-k="'+k+'" data-i="'+i+'" style="cursor:pointer"><div class="ic">'+c.ic+'</div><div class="mid"><div class="t">'+esc(x.t)+'</div><div class="s">'+esc(c.sub(x))+'</div>'+(c.pct?'<div class="bar"><i style="width:'+Math.min(100,c.pct(x))+'%"></i></div>':'')+'</div><div class="amt">'+mv(x.a)+'</div></div>';});el('l-'+k).innerHTML=h||'<div class="s">Пока пусто. Нажмите «+ Добавить».</div>';});
+  document.querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){openList(b.dataset.k,+b.dataset.i);};});
+}
+function openList(k,i){
+  var c=L[k],x=i<0?{}:st[k][i],h='<h3>'+(i<0?'Добавить':'Изменить')+'</h3>';
+  c.f.forEach(function(f,j){var v=x[f[0]];v=v===undefined?'':(f[2]?String(v).replace('.',','):v);h+='<label>'+f[1]+'</label><input id="e'+j+'" '+(f[2]?'inputmode="decimal" ':'')+'maxlength="40" value="'+esc(v)+'">';});
+  h+='<div class="btns"><button class="no" id="c">Отмена</button><button class="ok" id="s">Сохранить</button></div>'+(i<0?'':'<div class="btns"><button class="del" id="d">Удалить</button></div>');
+  sheet.innerHTML=h;ov.classList.add('show');
+  el('c').onclick=close;
+  if(i>=0)el('d').onclick=function(){st[k].splice(i,1);save();render();close();};
+  el('s').onclick=function(){var o={};c.f.forEach(function(f,j){var v=el('e'+j).value.trim();if(f[2]){var n=parseFloat(v.replace(/\s/g,'').replace(',','.'));o[f[0]]=isNaN(n)?0:n;}else o[f[0]]=v;});if(!o.t)o.t='Без названия';if(i<0)st[k].push(o);else st[k][i]=o;save();render();close();};
+}
+function go(k){TABS.forEach(function(t,i){var p=el('p-'+t);if(p)p.style.display=t===k?'':'none';document.querySelectorAll('nav div')[i].classList.toggle('on',t===k);});scrollTo(0,0);}
+document.querySelectorAll('nav div').forEach(function(d,i){d.onclick=function(){go(TABS[i]);};});
+document.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){go(b.dataset.go);};});
+document.querySelectorAll('[data-add]').forEach(function(b){b.onclick=function(){openList(b.dataset.add,-1);};});
+render();
+</script>
+</body>
+</html>
